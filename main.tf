@@ -1,7 +1,11 @@
+terraform {
+	  required_version = ">= 0.12"
+}
+
 provider "aws" {
-  access_key = ""
-  secret_key = ""
-  region     = "us-east-1"
+  access_key = "AKIAJTSLDXHQLZFNK6EQ"
+  secret_key = "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"
+  region     = var.aws_region
 }
 
 # Query all avilable Availibility Zone
@@ -132,6 +136,23 @@ resource "aws_security_group_rule" "all_outbound_access" {
   to_port           = 0
   type              = "egress"
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group" "sg_private" {
+	  name        = "my_test_sg_private"
+    description = "Ingress for Vault"
+	  vpc_id      = aws_vpc.main.id
+
+		dynamic "ingress" {
+		  iterator = port
+		  for_each = var.ingress_ports
+		  content {
+			  from_port   = port.value
+				to_port     = port.value
+				protocol    = "tcp"
+				cidr_blocks = ["0.0.0.0/0"]
+			}
+		}
 }
 
 resource "aws_eip" "my-test-eip" {
