@@ -1,14 +1,18 @@
+# Optional configuration for the Terraform Engine.
 terraform {
   required_version = ">= 0.12"
 }
 
+# Provider
+# To Implement cloud specific API.
+# Provider config is specific to each cloud.
 provider "aws" {
   access_key = ""
   secret_key = ""
   region     = var.aws_region
 }
 
-# Query all avilable Availibility Zone
+# Query all avilable Availibility Zone.
 data "aws_availability_zones" "available" {}
 
 # VPC Creation
